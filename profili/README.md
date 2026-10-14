@@ -35,9 +35,8 @@ With "Hyper"/high-speed PLA you can raise it after the volumetric flow test.
 **Retraction 0.8 mm @ 40 mm/s, deretraction 35 mm/s, z-hop 0.2 mm.** Recommended values for the V3 SE direct drive;
 the slower deretraction avoids under-extrusion at the start of lines.
 
-**Pressure advance.** The stock Creality firmware of the V3 SE ignores linear advance (`M900`).
-With Simomusu93-FW it works: the profiles inheriting from "Soleyin Ultra PLA" write `M900 K0.05`, so it is active at 0.05.
-Fine tuning with the Creality Print "Pressure advance" test is still to do.
+**Pressure advance.** The profiles inheriting from "Soleyin Ultra PLA" write `M900 K0.05`. Both the stock Creality firmware and
+Simomusu93-FW (from 0.8) ignore it: linear advance is off. Simomusu93-FW 0.2–0.7 had it on, and at 0.05 it under-extruded the first layer.
 
 **Piccole (small).** 0.12 mm layers, 3 walls (small details are almost all walls), 10 s minimum layer time
 (each layer must cool before the next, or the tips melt), organic supports with 0.5 mm tip

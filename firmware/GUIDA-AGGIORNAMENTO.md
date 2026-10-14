@@ -4,7 +4,7 @@ Stampante: Creality Ender-3 V3 SE · scheda **CR4NS200320C13** (chip GD32F303). 
 
 | File | Dove |
 |---|---|
-| Firmware nuovo | `firmware/build/Simomusu93-FW_0.7.bin` |
+| Firmware nuovo | `firmware/build/Simomusu93-FW_0.8.bin` |
 | Firmware originale (backup) | `firmware/originale-creality-1.1.0/Ender3 V3 SE GD303SWV1.1.0_HWCR4NS200320C13_20250422.bin` |
 
 ---
@@ -23,16 +23,16 @@ Stampante: Creality Ender-3 V3 SE · scheda **CR4NS200320C13** (chip GD32F303). 
 
 ## 1. Caricare Simomusu93-FW
 
-1. Copia `Simomusu93-FW_0.7.bin` nella **cartella principale** della microSD (non dentro altre cartelle).
-2. **Rinominalo con un nome mai usato prima**, corto e senza spazi, ad esempio `sm93_07.bin`.
-   Il bootloader ignora un file con un nome già installato: ogni volta usa un nome nuovo (`sm93_07b.bin`, …).
+1. Copia `Simomusu93-FW_0.8.bin` nella **cartella principale** della microSD (non dentro altre cartelle).
+2. **Rinominalo con un nome mai usato prima**, corto e senza spazi, ad esempio `sm93_08.bin`.
+   Il bootloader ignora un file con un nome già installato: ogni volta usa un nome nuovo (`sm93_08b.bin`, …).
 3. Rimuovi la microSD dal PC in sicurezza (icona "Rimozione sicura").
 4. **Spegni la stampante** con l'interruttore.
 5. Inserisci la microSD nello slot della stampante.
 6. **Accendi** e **non toccare niente per almeno 30 secondi**: il bootloader copia il firmware (10–15 s di solito).
    Lo schermo può restare nero o fermo in questo tempo: è normale.
    **Non spegnere durante questa fase.**
-7. Quando compare il menu, vai in **Controllo → Info**: deve esserci **`Simomusu93 0.7`**.
+7. Quando compare il menu, vai in **Controllo → Info**: deve esserci **`Simomusu93 0.8`**.
    Se c'è ancora la versione vecchia: il file non è stato letto → rinominalo con un altro nome nuovo e ripeti dal punto 4.
 8. Togli la microSD e cancella il `.bin` (o lascialo: con lo stesso nome non verrà reinstallato).
 

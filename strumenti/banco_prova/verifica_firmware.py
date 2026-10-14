@@ -18,7 +18,6 @@ REQUIRED = {                       # funzione nel firmware -> funzionalità
     "Draw_Print_Layer()": "riga 'Strato X/Y' nella schermata di stampa",
     "simomusu93_ram_free_min()": "misuratore RAM libera (menu Info)",
     "simomusu93_ram_paint()": "riempimento RAM all'avvio",
-    "GcodeSuite::M900()": "linear advance (M900)",
     "GcodeSuite::M852()": "correzione squadratura (M852)",
     "GcodeSuite::M500()": "salvataggio impostazioni (M500)",
     "Temperature::min_temp_error(heater_id_t)": "protezione temperatura minima (intatta)",
@@ -61,6 +60,8 @@ ver = m.group(1).decode() if m else ""
 for name, what in REQUIRED.items():
     if "(0.3)" in what and ver in ("Simomusu93 0.1", "Simomusu93 0.2"): continue
     check(name in syms, what)
+# 0.8: linear advance spento come nel firmware Creality (con l'input shaping Creality sottoestrudeva il primo strato)
+check("GcodeSuite::M900()" not in syms, "linear advance spento (M900 assente, come Creality)")
 kill_screen_called = "MarlinUI::kill_screen" in syms and " U MarlinUI::kill_screen" in syms
 check(not kill_screen_called, "nessuna chiamata a funzioni inesistenti (bug di navaismo su kill_screen)")
 undef = [l for l in syms.splitlines() if re.match(r"^\s+U ", l)]

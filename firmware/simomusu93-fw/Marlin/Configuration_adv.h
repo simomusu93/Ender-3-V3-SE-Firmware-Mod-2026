@@ -1934,7 +1934,7 @@
  *
  * See https://marlinfw.org/docs/features/lin_advance.html for full instructions.
  */
-#define LIN_ADVANCE // Simomusu93-FW: attivo, ma con K=0 non cambia nulla finché non si imposta M900 Kx + M500 (dopo la taratura)
+//#define LIN_ADVANCE // Simomusu93-FW 0.8: spento come Creality. Acceso (0.2-0.7) con M900 K0.05 dal G-code sottoestrudeva il primo strato a 80 mm/s (prova 14/10/2026: con M900 K0 cubo perfetto)
 #if ENABLED(LIN_ADVANCE)
   //#define EXTRA_LIN_ADVANCE_K // Enable for second linear advance constants
   #define LIN_ADVANCE_K 0.0 // Simomusu93-FW: era 0.2 (Creality, ma spento). 0 = disattivo fino alla taratura

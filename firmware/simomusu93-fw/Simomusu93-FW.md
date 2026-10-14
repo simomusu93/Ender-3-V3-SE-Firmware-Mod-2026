@@ -19,7 +19,15 @@ The printer's menus are in Italian; the new labels are translated in brackets be
 
 ## Versions
 
-### 0.7 – `build/Simomusu93-FW_0.7.bin` (233,540 bytes, SHA256 F01614AB…C47362E16) – TO TEST
+### 0.8 – `build/Simomusu93-FW_0.8.bin` (231,660 bytes, SHA256 7A29B706…B5F944F4) – TO TEST
+- **Linear advance turned off again**, as in the stock Creality firmware. Test on 2026-10-14, same 20 mm cube, same firmware (0.6):
+  with `M900 K0.05` (written by Creality Print from the filament profile) the first layer was badly under-extruded on the 80 mm/s infill;
+  with `M900 K0` the cube printed perfectly. In this Creality Marlin 2.0.8 fork linear advance does not work well together with
+  Creality's input shaping / S-curve. Without `LIN_ADVANCE`, `M900` is an unknown command and is ignored, so the profiles can stay as they are.
+- The EEPROM layout doesn't change (Marlin keeps the K slot even with LIN_ADVANCE off): settings are kept.
+- Test bench: the M900 presence check became "M900 absent". 24/24 checks.
+
+### 0.7 (233,540 bytes, SHA256 F01614AB…C47362E16, not kept in the repository)
 0.6 on the printer (2026-10-14): "Strato 0/166" OK, but a new print started showing 12% and 00:30 left from the previous (aborted) print.
 - Cause 1: Creality only redrew the % when it was > 0, so a reset to 0 never reached the screen.
 - Cause 2: the print screen is drawn right after `openAndPrintFile()`, which only *queues* M23/M24: the file is opened later,
@@ -27,7 +35,7 @@ The printer's menus are in Italian; the new labels are translated in brackets be
 - Fix: `simomusu93_new_print_reset()` (%, M73 remaining time, layer info, screen variables) before the print screen is drawn,
   and the % is redrawn on every change, 0 included.
 - Same session, open issue: the 20 mm cube came out under-extruded on the 80 mm/s first-layer infill while the slow purge line was fine.
-  Suspect: linear advance (stock Creality has it off; the G-code sets `M900 K0.05`). Test with `M900 K0` in progress.
+  Suspect: linear advance (stock Creality has it off; the G-code sets `M900 K0.05`). Confirmed by the `M900 K0` test → linear advance off in 0.8.
 Test bench: 24/24 checks.
 
 ### 0.6 (233,500 bytes, SHA256 51AFFD77…B781F0D04, not kept in the repository)
@@ -89,7 +97,7 @@ Sensore filo (Si↔No), Reset (one click → yellow text, turn the knob → back
   Position checked on a photo of the real screen (2026-10-13): ~20 px free band between "remaining time" (up to y≈170) and the buttons (from y≈190).
 - **Correct % also when entering the print screen** (previously it restarted from the bytes read).
 - **Minimum free RAM** in the Info menu: stack painting at boot + check (`feature/simomusu93/simomusu93_ram.*`).
-- **Linear advance** enabled with K=0 in the firmware. **Note**: the filament profiles inheriting from "Soleyin Ultra PLA"
+- **Linear advance** enabled with K=0 in the firmware (**turned off again in 0.8**, see above). **Note**: the filament profiles inheriting from "Soleyin Ultra PLA"
   (Simomusu93, SUNLU PLA Basic/PLA+ Piccole/Grandi) make Creality Print write `M900 K0.05` at the start of the G-code
   → with this firmware linear advance **is active at 0.05** in those prints (the Creality firmware ignored the command).
   Simomusu93's choice (2026-10-13): keep it. Fine tuning: Creality Print "Pressure advance" test, then the value in the profiles.
@@ -122,7 +130,7 @@ PC checks: build without warnings, vector table identical to the official one (s
 | 0.1 | Time and % from M73 | correct estimate (**done**) | +0.3 KB | low |
 | 0.2 | Stack meter in the Info menu | **done** | <1 KB | low |
 | 0.2 | Current layer while printing | **done** | <1 KB | low |
-| 0.2 | Linear advance (M900, saved in EEPROM) | **enabled with K=0**, tuning still to do | 2-4 KB | medium (CPU load) |
+| 0.2 | Linear advance (M900, saved in EEPROM) | enabled in 0.2, **turned off in 0.8**: under-extrusion with Creality's input shaping; would need the Marlin 2.1 port | 2-4 KB | high |
 | 0.2 | Skew correction (M852) | **enabled with factor 0**, measurement still to do | ~1 KB | low |
 | 0.3 | Statistics (prints, hours, meters) | **done** | 1-2 KB | low |
 | 0.3 | Sound on/off | **done** | <0.5 KB | low |

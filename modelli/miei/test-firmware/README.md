@@ -10,11 +10,11 @@ Keep the original firmware ready on a second SD card. **Stay near the printer** 
 
 ## Test 1 – `test01_cubo_20mm.stl` (≈ 20 min): does the printer work?
 
-After flashing `Simomusu93-FW_0.7.bin`:
+After flashing `Simomusu93-FW_0.8.bin`:
 
 | Check | OK if… |
 |---|---|
-| Info menu | shows `Simomusu93 0.7` |
+| Info menu | shows `Simomusu93 0.8` |
 | Auto leveling | finishes without errors; Z-offset as before (or redo it) |
 | Heating | nozzle and bed reach their temperatures and stay stable |
 | Print | regular cube, readable X/Y/Z letters, 20 mm (±0.2) |

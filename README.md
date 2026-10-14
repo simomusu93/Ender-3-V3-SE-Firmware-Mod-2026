@@ -80,12 +80,13 @@ a firmware that crashes).
 | Version | What it adds |
 |---|---|
 | 0.1 | Remaining time and % from the slicer (`M73`), without enabling `HAS_DISPLAY` (on the DWIN display that would turn a thermal error into a crash) |
-| 0.2 | Remaining time **self-calibrated** on the real speed (e.g. printing at 160%), **current layer** "Strato 152/1078", minimum free RAM in the Info menu, linear advance (`M900`), skew correction (`M852`) |
+| 0.2 | Remaining time **self-calibrated** on the real speed (e.g. printing at 160%), **current layer** "Strato 152/1078", minimum free RAM in the Info menu, linear advance (`M900`, removed again in 0.8), skew correction (`M852`) |
 | 0.3 | **Statistics** (prints, hours, filament), **Sound on/off**, **Filament sensor on/off**, **Settings reset with confirmation** (previously one click wiped Z-offset and leveling) – first version flashed on the printer (2026-10-14) |
 | 0.4 | Info menu: "RAM libera min" (min free RAM) replaces "Contact us"; fixed the Control menu redraw when scrolling back up (empty or duplicated entries) |
 | 0.5 | Fixed the "Motion" label left overlapping another entry when scrolling the Control menu back up |
 | 0.6 | Fixed the layer counter showing "Z 0.44 mm" instead of "Strato X/Y": the start G-code's M190/M109 were wiping the total layer count |
 | 0.7 | A new print no longer shows the % and remaining time of the previous one |
+| 0.8 | **Linear advance off again** (as stock): with `M900 K0.05` the first layer was under-extruded, with K0 the test cube printed perfectly |
 
 Full changelog with sizes, SHA256 and test procedures: [`Simomusu93-FW.md`](firmware/simomusu93-fw/Simomusu93-FW.md).
 
@@ -110,7 +111,7 @@ Full procedure, including going back to the original firmware: [`firmware/UPDATE
 
 ### Next steps
 
-- Tune **linear advance** (Creality Print "Pressure advance" test) for the SUNLU profiles.
+- Linear advance only after a port to Marlin 2.1 (where it works together with input shaping): in this Creality 2.0.8 fork it under-extrudes.
 - Measure and correct **skew** (`M852`).
 - **7×7** leveling mesh for large parts.
 
