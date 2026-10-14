@@ -6,5 +6,5 @@
     "name": "Ender-3 V3 SE Simomusu93",
     "printer_settings_id": "Ender-3 V3 SE Simomusu93",
     "version": "26.10.10.9",
-    "layer_change_gcode": "M117 Strato {layer_num+1}/[total_layer_count]\n"
+    "thumbnails": "96x96/BTT_TFT, 300x300/CR_PNG"
 }

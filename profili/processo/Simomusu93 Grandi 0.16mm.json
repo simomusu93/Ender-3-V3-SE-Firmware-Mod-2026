@@ -32,6 +32,7 @@
     "internal_solid_infill_speed": "150",
     "top_surface_speed": "60",
     "gap_infill_speed": "50",
+    "bridge_speed": "50",
     "support_speed": "80",
     "travel_speed": "200",
 
@@ -41,6 +42,13 @@
     "top_surface_acceleration": "1500",
     "travel_acceleration": "2500",
     "initial_layer_acceleration": "500",
+    "default_jerk": "8",
+    "outer_wall_jerk": "8",
+    "inner_wall_jerk": "10",
+    "infill_jerk": "10",
+    "top_surface_jerk": "8",
+    "initial_layer_jerk": "8",
+    "travel_jerk": "10",
 
     "enable_support": "1",
     "support_type": "tree(auto)",

@@ -35,8 +35,14 @@ With "Hyper"/high-speed PLA you can raise it after the volumetric flow test.
 **Retraction 0.8 mm @ 40 mm/s, deretraction 35 mm/s, z-hop 0.2 mm.** Recommended values for the V3 SE direct drive;
 the slower deretraction avoids under-extrusion at the start of lines.
 
-**Pressure advance.** The profiles inheriting from "Soleyin Ultra PLA" write `M900 K0.05`. Both the stock Creality firmware and
-Simomusu93-FW (from 0.8) ignore it: linear advance is off. Simomusu93-FW 0.2–0.7 had it on, and at 0.05 it under-extruded the first layer.
+**Pressure advance: off** (`enable_pressure_advance = 0` in the four SUNLU profiles, since 2026-10-14). The Soleyin Ultra PLA parent
+turns it on with K 0.05, which made Creality Print write `M900 K0.05`: the stock firmware and Simomusu93-FW 0.8+ ignore it, but
+Simomusu93-FW 0.2–0.7 (and firmware with linear advance, e.g. Marlin 2.1 builds) under-extruded the first layer with it.
+
+**Printer profile "Ender-3 V3 SE Simomusu93".** G-code thumbnails `96x96/BTT_TFT, 300x300/CR_PNG`: the 96×96 one is written as
+RGB565 pixels that Simomusu93-FW 0.9+ draws on the file confirm screen (instead of Creality's robot); the 300×300 PNG stays for
+Creality Print. Use this printer profile (not the stock one) to get the preview. The old `M117 Strato …` layer-change G-code was
+removed: the V3 SE screen never showed M117, and Simomusu93-FW shows the layer by itself.
 
 **Piccole (small).** 0.12 mm layers, 3 walls (small details are almost all walls), 10 s minimum layer time
 (each layer must cool before the next, or the tips melt), organic supports with 0.5 mm tip
