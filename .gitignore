@@ -25,3 +25,7 @@ __pycache__/
 
 # --- Note di lavoro locali (percorsi del PC) ---
 CLAUDE.md
+
+# --- Sviluppo Marlin 2.1: solo in locale (scelta di Simomusu93, 14/10/2026) ---
+firmware/MARLIN-2.1-PORT.md
+firmware/marlin21*/

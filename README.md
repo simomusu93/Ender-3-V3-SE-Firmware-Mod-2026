@@ -23,7 +23,6 @@ Thanks also to [Marlin](https://github.com/MarlinFirmware/Marlin) and to
 | [`firmware/build/`](firmware/build/) | Compiled firmware `Simomusu93-FW_x.y.bin` |
 | [`firmware/UPDATE-GUIDE.md`](firmware/UPDATE-GUIDE.md) | How to flash the firmware and how to go back to the original ([Italiano](firmware/GUIDA-AGGIORNAMENTO.md)) |
 | [`firmware/ANALYSIS.md`](firmware/ANALYSIS.md) | Analysis of the Creality and navaismo firmware |
-| [`firmware/MARLIN-2.1-PORT.md`](firmware/MARLIN-2.1-PORT.md) | Plan and estimate for moving Simomusu93-FW to Marlin 2.1 (on navaismo's 2.1 port) |
 | [`strumenti/banco_prova/`](strumenti/banco_prova/) | Firmware test bench that runs on the PC, without the printer |
 | [`modelli/miei/test-firmware/`](modelli/miei/test-firmware/) | Test STLs for the firmware |
 | `calibrazione/`, `manutenzione/` | Calibration notes and maintenance log |
@@ -113,7 +112,6 @@ Full procedure, including going back to the original firmware: [`firmware/UPDATE
 ### Next steps
 
 - Linear advance only after a port to Marlin 2.1 (where it works together with input shaping): in this Creality 2.0.8 fork it under-extrudes.
-  Plan and estimate: [`firmware/MARLIN-2.1-PORT.md`](firmware/MARLIN-2.1-PORT.md).
 - Measure and correct **skew** (`M852`).
 - **7×7** leveling mesh for large parts.
 
