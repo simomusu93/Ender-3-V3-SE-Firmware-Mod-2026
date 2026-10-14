@@ -3,6 +3,11 @@
 Personal project by **Simomusu93** for 3D printing with a **Creality Ender-3 V3 SE** (mainboard **CR4NS200320C13**, GD32F303 chip)
 and the **Creality Print 7.3** slicer: print profiles, cutting models that are too big for the bed, and an improved firmware, **Simomusu93-FW**.
 
+## Download
+
+Latest firmware: **[Releases](https://github.com/simomusu93/Ender-3-V3-SE-Firmware-Mod-2026/releases)** (`Simomusu93-FW_x.y.bin`, C13 board only).
+How to flash and how to go back: [`firmware/UPDATE-GUIDE.md`](firmware/UPDATE-GUIDE.md).
+
 ## Acknowledgements
 
 Special thanks to **navaismo** and their project [navaismo/Ender-3V3-SE](https://github.com/navaismo/Ender-3V3-SE):
@@ -43,6 +48,9 @@ Folder names, slicer profile names and the printer's menu labels are in Italian 
    PLA+ ~5 °C hotter, 0.8 mm retraction, 12 mm³/s max volumetric flow.
 4. **Installed** in Creality Print and backed up to `profili/` with `backup-profili.ps1`.
    Details and reasoning: [`profili/README.md`](profili/README.md).
+5. **Kept coherent with the firmware** (2026-10-14): printer profile thumbnails `96x96/BTT_TFT, 300x300/CR_PNG` (the 96×96 one is
+   drawn by Simomusu93-FW 0.9 on the printer screen), pressure advance off in the SUNLU profiles (it under-extruded, see 0.8),
+   old `M117` layer G-code removed (the screen never showed it; the firmware shows the layer itself).
 
 ### 2. Cutting oversized models (Blender)
 
@@ -99,6 +107,9 @@ Before every flash, `strumenti/banco_prova/banco_prova.ps1` checks the firmware 
 2. **Level 2 – the G-code** (`simula_gcode.cpp`): the firmware's own layer/time parsing code, compiled for the PC, reads a real G-code
    and checks that layer count and remaining time are right, also at different speeds;
 3. **Level 3 – screen previews** (`anteprima_schermo.py`): images of what the print screen will look like.
+4. **Level 4 – G-code preview** (`simula_anteprima.cpp`, `verifica_anteprima.py`): the firmware's preview code, compiled for the PC,
+   draws on a fake 240×320 screen; the result must match the expected image pixel by pixel, in both formats
+   (BTT_TFT from Creality Print and the `anteprima_gcode.py` block).
 
 ### 7. Flashing the printer
 
@@ -108,6 +119,7 @@ Full procedure, including going back to the original firmware: [`firmware/UPDATE
 3. printer off → insert the microSD → power on → wait 30 seconds without touching anything;
 4. check the version in Info, then run **auto Z-offset**, **auto leveling**, **Save**;
 5. test prints (20 mm cube, M73 tower) from `modelli/miei/test-firmware/`;
+   from 0.9, slice with the "Ender-3 V3 SE Simomusu93" printer profile to get the model preview on the file confirm screen;
 6. to go back: same procedure with the official Creality 1.1.0 file for the C13 board.
 
 ### Next steps
@@ -115,6 +127,7 @@ Full procedure, including going back to the original firmware: [`firmware/UPDATE
 - Linear advance only after a port to Marlin 2.1 (where it works together with input shaping): in this Creality 2.0.8 fork it under-extrudes.
 - Measure and correct **skew** (`M852`).
 - **7×7** leveling mesh for large parts.
+- Layer height shown on the file confirm screen ("0.200 ;m" comes from Creality Print's header; cosmetic).
 
 ---
 
