@@ -19,7 +19,7 @@ The printer's menus are in Italian; the new labels are translated in brackets be
 
 ## Versions
 
-### 0.8 – `build/Simomusu93-FW_0.8.bin` (231,660 bytes, SHA256 7A29B706…B5F944F4) – TO TEST
+### 0.8 – `build/Simomusu93-FW_0.8.bin` (231,660 bytes, SHA256 7A29B706…B5F944F4) – FLASHED on 2026-10-14
 - **Linear advance turned off again**, as in the stock Creality firmware. Test on 2026-10-14, same 20 mm cube, same firmware (0.6):
   with `M900 K0.05` (written by Creality Print from the filament profile) the first layer was badly under-extruded on the 80 mm/s infill;
   with `M900 K0` the cube printed perfectly. In this Creality Marlin 2.0.8 fork linear advance does not work well together with
