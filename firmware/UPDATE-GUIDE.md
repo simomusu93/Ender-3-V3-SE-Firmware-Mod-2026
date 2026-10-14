@@ -24,7 +24,9 @@ The printer's menus are shown here in English; on an Italian-language printer th
 ## 1. Flashing Simomusu93-FW
 
 1. Copy `Simomusu93-FW_0.8.bin` to the **root** of the microSD (not inside a folder).
-2. **Rename it to a name never used before**, short and without spaces, e.g. `sm93_08.bin`.
+2. **Rename it to a name never used before**: at most 8 letters/digits, **no spaces and no extra dots**, e.g. `fw08.bin`.
+   Names like `sm93_0.8.bin` (two dots) don't work: Windows stores them with a short name like `SM93_0~1.BIN`, the same for 0.6, 0.7, 0.8…,
+   and the bootloader takes it for the firmware already installed (happened on 2026-10-14).
    The bootloader ignores a file whose name was already installed: use a new name every time (`sm93_08b.bin`, …).
 3. Safely eject the microSD from the PC.
 4. **Switch the printer off** with the power switch.
