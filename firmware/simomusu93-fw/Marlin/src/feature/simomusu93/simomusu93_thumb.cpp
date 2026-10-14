@@ -12,7 +12,7 @@
 #include <string.h>
 
 static constexpr uint8_t THUMB_SIZE = 96;
-static constexpr uint8_t HEADER_SCAN_LINES = 60;   // il blocco viene messo subito dopo l'intestazione di Creality Print
+static constexpr uint16_t HEADER_SCAN_LINES = 300; // righe iniziali in cui cercare l'anteprima (prima del G-code vero)
 
 // Rettangolo di un colore: una "striscia" di pixel uguali, allungata in verticale finché le righe sotto sono uguali
 struct ThumbRun {
@@ -92,33 +92,44 @@ bool simomusu93_render_thumb(const char *filename, const uint16_t x, const uint1
   card.openFileRead(name);
   if (!card.isFileOpen()) return false;
 
+  // Due formati, stessi pixel (RGB565 esadecimale, 0000 = sfondo):
+  //  - "; E3V3SE_THUMB_RAW16_BEGIN 96x96" (script strumenti/anteprima_gcode.py, come navaismo)
+  //  - BTT_TFT, scritto direttamente da Creality Print/OrcaSlicer con anteprima "96x96/BTT_TFT":
+  //    ";00600060" (larghezza e altezza in esadecimale) seguito da una riga ";<pixel>" per ogni riga dell'immagine
   char line[4 * THUMB_SIZE + 8];
   bool found = false;
-  for (uint8_t n = 0; n < HEADER_SCAN_LINES && read_line(line, sizeof(line)); n++) {
+  uint8_t w = THUMB_SIZE, h = THUMB_SIZE;
+  for (uint16_t n = 0; n < HEADER_SCAN_LINES && !found && read_line(line, sizeof(line)); n++) {
     const char *p = line;
     if (*p++ != ';') continue;
+    if (strlen(p) == 8 && parse_hex4(p) && parse_hex4(p + 4)) {   // BTT_TFT
+      const uint16_t bw = parse_hex4(p), bh = parse_hex4(p + 4);
+      if (bw <= THUMB_SIZE && bh <= THUMB_SIZE) { w = bw; h = bh; found = true; }
+      continue;
+    }
     while (*p == ' ') p++;
-    if (strncmp(p, "E3V3SE_THUMB_RAW16_BEGIN", 24) == 0) { found = true; break; }
+    if (strncmp(p, "E3V3SE_THUMB_RAW16_BEGIN", 24) == 0) found = true;
   }
+  const uint16_t ox = x + (THUMB_SIZE - w) / 2, oy = y + (THUMB_SIZE - h) / 2;   // immagini più piccole: centrate
 
   uint8_t row = 0;
   if (found) {
     uint16_t count = 0;
     uint8_t prev_n = 0;
-    while (row < THUMB_SIZE && read_line(line, sizeof(line))) {
+    while (row < h && read_line(line, sizeof(line))) {
       HAL_watchdog_refresh();
       const char *p = line;
       if (*p++ != ';') continue;
       while (*p == ' ') p++;
       if (strncmp(p, "E3V3SE_THUMB_RAW16_END", 22) == 0) break;
-      if (strlen(p) < 4 * THUMB_SIZE) break;   // riga incompleta: si ferma qui
+      if (strlen(p) < 4U * w) break;          // riga incompleta: si ferma qui
 
       uint8_t cur_n = 0, pi = 0;
-      for (uint8_t px = 0; px < THUMB_SIZE;) {
+      for (uint8_t px = 0; px < w;) {
         const uint16_t color = parse_hex4(p + px * 4);
         if (color == 0) { px++; continue; }
         uint8_t px2 = px;
-        while (px2 + 1 < THUMB_SIZE && parse_hex4(p + (px2 + 1) * 4) == color) px2++;
+        while (px2 + 1 < w && parse_hex4(p + (px2 + 1) * 4) == color) px2++;
 
         // Le strisce di una riga sono ordinate e separate: basta scorrere quelle della riga sopra
         while (pi < prev_n && thumb_runs[open_prev[pi]].x1 < px) pi++;
@@ -145,12 +156,12 @@ bool simomusu93_render_thumb(const char *filename, const uint16_t x, const uint1
 
       // Una riga aggiunge al massimo MAX_RUNS_PER_ROW strisce: se non ci stanno, disegna quelle che ci sono
       if (MAX_THUMB_RUNS - count < MAX_RUNS_PER_ROW) {
-        flush_runs(count, x, y);
+        flush_runs(count, ox, oy);
         count = 0;
         prev_n = 0;
       }
     }
-    if (count) flush_runs(count, x, y);
+    if (count) flush_runs(count, ox, oy);
   }
 
   card.closefile();

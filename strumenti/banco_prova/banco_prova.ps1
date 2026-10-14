@@ -70,6 +70,15 @@ if (-not (Select-String -Path $gthumb -Pattern "E3V3SE_THUMB_RAW16_BEGIN" -Simpl
   $l4 = $LASTEXITCODE
 }
 if ($l4 -eq 0 -and (Test-Path $rawf)) { & $py -I (Join-Path $here "verifica_anteprima.py") $gthumb $rawf (Join-Path $out "anteprima_disegnata.png"); $l4 = $LASTEXITCODE }
+# Stessa anteprima nel formato BTT_TFT (quello che Creality Print scrive da solo con "96x96/BTT_TFT"), in cima al file
+if ($l4 -eq 0 -and (Select-String -Path $Gcode -Pattern "png begin 96*96" -SimpleMatch -Quiet)) {
+  $gbtt = Join-Path $out "con_anteprima_btt.gcode"
+  & $py -I (Join-Path $here "verifica_anteprima.py") --crea-btt $Gcode $gbtt
+  & (Join-Path $here "simula_anteprima.exe") $gbtt $rawf
+  $l4 = $LASTEXITCODE
+  if ($l4 -eq 0) { & $py -I (Join-Path $here "verifica_anteprima.py") $gbtt $rawf (Join-Path $out "anteprima_disegnata_btt.png"); $l4 = $LASTEXITCODE }
+  Remove-Item $gbtt -ErrorAction SilentlyContinue
+}
 Remove-Item $gthumb, $rawf -ErrorAction SilentlyContinue
 
 Write-Output "`n===== ESITO ====="

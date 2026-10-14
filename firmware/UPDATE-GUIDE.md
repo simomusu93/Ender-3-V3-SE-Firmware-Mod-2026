@@ -64,8 +64,10 @@ A photo of the screen helps understand the problem.
 
 ## 3b. G-code preview (from 0.9)
 
-The printer shows the model picture on the file confirm screen only if the G-code contains the preview block. Two ways to add it:
-- **automatically**: in Creality Print, process settings → *Others* (advanced/expert view) → **Post-processing scripts**, enter
+The printer shows the model picture on the file confirm screen only if the G-code contains a preview it can draw. Three ways:
+- **best, no script**: in Creality Print, printer settings → *G-code thumbnails*: `96x96/BTT_TFT, 300x300/CR_PNG`
+  (Creality Print then writes the 96×96 preview directly in a format the firmware draws);
+- **with the script, automatically**: in Creality Print, process settings → *Others* (advanced/expert view) → **Post-processing scripts**, enter
   `"C:\Users\<user>\.venvs\pio\Scripts\python.exe" "<project>\strumenti\anteprima_gcode.py";`
   (with your own paths); every exported G-code then gets the preview;
 - **by hand**: drag one or more G-code files onto `strumenti/anteprima_gcode.bat`.

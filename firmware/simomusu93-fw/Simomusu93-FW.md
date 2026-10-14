@@ -19,7 +19,7 @@ The printer's menus are in Italian; the new labels are translated in brackets be
 
 ## Versions
 
-### 0.9 – `build/Simomusu93-FW_0.9.bin` (232,772 bytes, SHA256 58A8C838…9A60B529) – TO TEST
+### 0.9 – `build/Simomusu93-FW_0.9.bin` (232,900 bytes, SHA256 D1A87396…F2B650E6) – TO TEST
 - **G-code preview on the file confirm screen**, instead of Creality's fixed "robot" image. The V3 SE screen cannot decode the
   PNG/JPG thumbnails that Creality Print embeds (Creality's own code says so and always shows the robot), so:
   - `strumenti/anteprima_gcode.py` (slicer post-processing script, or drag a G-code onto `anteprima_gcode.bat`) converts the 96×96 PNG
@@ -28,10 +28,12 @@ The printer's menus are in Italian; the new labels are translated in brackets be
     vertically, grouped by colour, a 16 ms pause every 10 commands (the panel locks up if flooded), watchdog fed while drawing.
   Format and algorithm from navaismo's 2.1 port (`ThumbRender.cpp`, GPL-3.0), rewritten for Marlin 2.0.8; 1024 runs = 6 KB RAM
   (navaismo: 1536 = 9 KB); bigger images just flush early. New `DWIN_Fill_Rect_Raw()`.
+  It also reads the **BTT_TFT** thumbnail that Creality Print/OrcaSlicer write by themselves (printer setting
+  `96x96/BTT_TFT`: a `;00600060` size line + one `;<RGB565 hex>` line per row): **no script needed**. The first 300 lines are searched.
   No preview block → the robot as before. Title shows "Anteprima..." while drawing (~1.5 s for the test cube, ~3.4 s for Kratos).
 - RAM: 29.1 KB static (+6.5 KB) → 34.9 KB left for stack and heap. Settings unchanged.
-- Test bench level 4: the firmware's preview code compiled for the PC draws on a fake 240×320 screen: cube and Kratos pixel-exact
-  (0 different pixels; Kratos also exercises the early flush), no overdraw, nothing outside the 96×96 area. 25/25 checks.
+- Test bench level 4: the firmware's preview code compiled for the PC draws on a fake 240×320 screen: cube and Kratos pixel-exact in both formats
+  (script and BTT_TFT generated like OrcaSlicer's `Thumbnails.cpp`; 0 different pixels; Kratos also exercises the early flush), no overdraw, nothing outside the 96×96 area. 25/25 checks.
 
 ### 0.8 – (231,660 bytes, SHA256 7A29B706…B5F944F4, not kept in the repository) – FLASHED on 2026-10-14
 - **Linear advance turned off again**, as in the stock Creality firmware. Test on 2026-10-14, same 20 mm cube, same firmware (0.6):

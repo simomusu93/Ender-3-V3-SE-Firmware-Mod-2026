@@ -6,6 +6,7 @@ non sa decodificarlo (per questo il firmware Creality mostra sempre l'omino). Qu
     ; <96 pixel RGB565 in esadecimale>      (96 righe, 0000 = sfondo, non disegnato)
     ; E3V3SE_THUMB_RAW16_END
 e la inserisce subito dopo l'intestazione (il firmware la cerca nelle prime 60 righe).
+Alternativa senza script: in Creality Print anteprima "96x96/BTT_TFT" (il firmware legge anche quel formato).
 Formato compatibile con navaismo/Marlin_bugfix_2.1_E3V3SE (SlicerScripts/orca_parser.py), scritto da zero.
 
 Uso:

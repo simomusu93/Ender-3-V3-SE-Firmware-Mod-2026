@@ -6,7 +6,8 @@
  *   ; E3V3SE_THUMB_RAW16_BEGIN 96x96
  *   ; <96 pixel RGB565 in esadecimale, 4 cifre per pixel>   (96 righe)
  *   ; E3V3SE_THUMB_RAW16_END
- * e il firmware lo disegna a rettangoli pieni, raggruppati per colore.
+ * e il firmware lo disegna a rettangoli pieni, raggruppati per colore. Legge anche il formato BTT_TFT che Creality Print
+ * scrive da solo con l'anteprima "96x96/BTT_TFT" (";00600060" + una riga ";<pixel>" per riga): stessi pixel, niente script.
  *
  * Formato e algoritmo (RLE per riga, fusione verticale, raggruppamento per colore, pausa ogni 10 comandi)
  * ripresi da navaismo/Marlin_bugfix_2.1_E3V3SE (GPL-3.0, Marlin/src/e3v3se/ThumbRender.cpp), adattati a Marlin 2.0.8.

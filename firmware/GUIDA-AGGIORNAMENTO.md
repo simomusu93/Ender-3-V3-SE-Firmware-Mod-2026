@@ -64,8 +64,10 @@ Una foto dello schermo aiuta a capire il problema.
 
 ## 3b. Anteprima del G-code (dalla 0.9)
 
-La stampante mostra l'immagine del modello nella schermata di conferma solo se il G-code contiene il blocco dell'anteprima. Per aggiungerlo:
-- **in automatico**: in Creality Print, impostazioni del Processo → *Altro* (vista avanzata/esperto) → **Script di post-elaborazione**, scrivi
+La stampante mostra l'immagine del modello nella schermata di conferma solo se il G-code contiene un'anteprima che sa disegnare. Tre modi:
+- **il migliore, senza script**: in Creality Print, impostazioni della Stampante → *Anteprime G-code*: `96x96/BTT_TFT, 300x300/CR_PNG`
+  (Creality Print scrive da solo l'anteprima 96×96 in un formato che il firmware disegna);
+- **con lo script, in automatico**: in Creality Print, impostazioni del Processo → *Altro* (vista avanzata/esperto) → **Script di post-elaborazione**, scrivi
   `"C:\Users\<utente>\.venvs\pio\Scripts\python.exe" "<cartella del progetto>\strumenti\anteprima_gcode.py";` (con i tuoi percorsi)
   e ogni G-code esportato avrà l'anteprima;
 - **a mano**: trascina uno o più G-code sul file `strumenti/anteprima_gcode.bat`.
