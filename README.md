@@ -118,7 +118,14 @@ Full procedure, including going back to the original firmware: [`firmware/UPDATE
 ## ⚠️ Disclaimer
 
 Simomusu93-FW is a personal project, tested on a single printer. Use it only with a **CR4NS200320C13** board and
-only if you know how to go back to the original Creality firmware. No warranty.
+only if you know how to go back to the original Creality firmware. Provided "as is", without any warranty (GPL-3.0, sections 15–16):
+you flash it at your own risk.
+
+## Trademarks
+
+This is an independent community project. It is **not affiliated with, endorsed by or supported by Creality**.
+"Creality", "Ender" and "Creality Print" are trademarks of their respective owners and are used here only to describe
+which printer and software this project works with. No Creality logos, images or official firmware files are included.
 
 ## Licenses
 
