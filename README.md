@@ -18,7 +18,7 @@ Thanks also to [Marlin](https://github.com/MarlinFirmware/Marlin) and to
 | Folder | Contents |
 |---|---|
 | [`profili/`](profili/) | Creality Print profiles: process (small / large prints) and filament (SUNLU PLA Basic and PLA+) |
-| [`strumenti/`](strumenti/) | Blender scripts (cutting oversized STLs with alignment pins, renders, analysis) and Python tools |
+| [`strumenti/`](strumenti/) | Blender scripts (cutting oversized STLs with alignment pins, renders, analysis) and Python tools, incl. `anteprima_gcode.py` (G-code preview for the printer screen) |
 | [`firmware/simomusu93-fw/`](firmware/simomusu93-fw/) | **Simomusu93-FW** source code; changelog: [`Simomusu93-FW.md`](firmware/simomusu93-fw/Simomusu93-FW.md) |
 | [`firmware/build/`](firmware/build/) | Compiled firmware `Simomusu93-FW_x.y.bin` |
 | [`firmware/UPDATE-GUIDE.md`](firmware/UPDATE-GUIDE.md) | How to flash the firmware and how to go back to the original ([Italiano](firmware/GUIDA-AGGIORNAMENTO.md)) |
@@ -86,6 +86,7 @@ a firmware that crashes).
 | 0.5 | Fixed the "Motion" label left overlapping another entry when scrolling the Control menu back up |
 | 0.6 | Fixed the layer counter showing "Z 0.44 mm" instead of "Strato X/Y": the start G-code's M190/M109 were wiping the total layer count |
 | 0.7 | A new print no longer shows the % and remaining time of the previous one |
+| 0.9 | **G-code preview** on the file confirm screen instead of Creality's fixed robot (post-processing script + firmware renderer, based on navaismo's 2.1 work) |
 | 0.8 | **Linear advance off again** (as stock): with `M900 K0.05` the first layer was under-extruded, with K0 the test cube printed perfectly |
 
 Full changelog with sizes, SHA256 and test procedures: [`Simomusu93-FW.md`](firmware/simomusu93-fw/Simomusu93-FW.md).

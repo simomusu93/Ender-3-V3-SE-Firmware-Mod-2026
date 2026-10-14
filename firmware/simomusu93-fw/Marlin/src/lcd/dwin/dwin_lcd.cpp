@@ -223,6 +223,19 @@ void DWIN_Draw_Line(uint16_t color, uint16_t xStart, uint16_t yStart, uint16_t x
   DWIN_Send(i);
 }
 
+// Simomusu93-FW: rettangolo pieno nel colore impostato con DWIN_Set_Color (comando 0x5B, come mode 1 qui sotto)
+void DWIN_Fill_Rect_Raw(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd)
+{
+  if (xEnd >= DWIN_WIDTH) xEnd = DWIN_WIDTH - 1;
+  size_t i = 0;
+  DWIN_Byte(i, 0x5B);
+  DWIN_Word(i, xStart);
+  DWIN_Word(i, yStart);
+  DWIN_Word(i, xEnd);
+  DWIN_Word(i, yEnd);
+  DWIN_Send(i);
+}
+
 // Draw a rectangle
 //  mode: 0=frame, 1=fill, 2=XOR fill
 //  color: Rectangle color

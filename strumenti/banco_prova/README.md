@@ -11,6 +11,7 @@ Tests the firmware **on the PC, without the printer**. Single command (PowerShel
 | 1 | `verifica_firmware.py` | the `.bin`: boot structure, version, that every feature is really inside, that the thermal protections are there, no missing functions, memory and stack function by function |
 | 2 | `simula_gcode.exe` (from `simula_gcode.cpp`) | compiles **the same source file as the firmware** (`simomusu93_gcode_info.cpp`) and runs it on a real G-code, character by character like the printer: layers counted vs declared, M73 commands, comparison with the Creality estimate |
 | 3 | `anteprima_schermo.py` | draws the print screen (original Creality on the left, Simomusu93-FW on the right) at a few moments of the print |
+| 4 | `simula_anteprima.exe` + `verifica_anteprima.py` | the firmware's G-code preview code (copied into `anteprima_stub/`) draws on a fake 240×320 screen; the result must match the script's image pixel by pixel, with no overdraw and nothing outside the 96×96 area |
 
 Results in `risultati/<G-code name>/` (CSV with the full history + images).
 

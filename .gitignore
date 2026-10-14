@@ -29,3 +29,4 @@ CLAUDE.md
 # --- Sviluppo Marlin 2.1: solo in locale (scelta di Simomusu93, 14/10/2026) ---
 firmware/MARLIN-2.1-*.md
 firmware/marlin21*/
+strumenti/banco_prova/anteprima_stub/feature/

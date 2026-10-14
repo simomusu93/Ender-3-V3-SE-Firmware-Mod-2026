@@ -4,7 +4,7 @@ Printer: Creality Ender-3 V3 SE · mainboard **CR4NS200320C13** (GD32F303 chip).
 
 | File | Where |
 |---|---|
-| New firmware | `firmware/build/Simomusu93-FW_0.8.bin` |
+| New firmware | `firmware/build/Simomusu93-FW_0.9.bin` |
 | Original firmware (backup) | `Ender3 V3 SE GD303SWV1.1.0_HWCR4NS200320C13_20250422.bin` from the official Creality download page (not included in this repository) |
 
 The printer's menus are shown here in English; on an Italian-language printer they are *Controllo → Info*, *Livellamento*, *Salva impostazioni*.
@@ -23,18 +23,18 @@ The printer's menus are shown here in English; on an Italian-language printer th
 
 ## 1. Flashing Simomusu93-FW
 
-1. Copy `Simomusu93-FW_0.8.bin` to the **root** of the microSD (not inside a folder).
-2. **Rename it to a name never used before**: at most 8 letters/digits, **no spaces and no extra dots**, e.g. `fw08.bin`.
+1. Copy `Simomusu93-FW_0.9.bin` to the **root** of the microSD (not inside a folder).
+2. **Rename it to a name never used before**: at most 8 letters/digits, **no spaces and no extra dots**, e.g. `fw09.bin`.
    Names like `sm93_0.8.bin` (two dots) don't work: Windows stores them with a short name like `SM93_0~1.BIN`, the same for 0.6, 0.7, 0.8…,
    and the bootloader takes it for the firmware already installed (happened on 2026-10-14).
-   The bootloader ignores a file whose name was already installed: use a new name every time (`sm93_08b.bin`, …).
+   The bootloader ignores a file whose name was already installed: use a new name every time (`fw09b.bin`, …).
 3. Safely eject the microSD from the PC.
 4. **Switch the printer off** with the power switch.
 5. Insert the microSD into the printer.
 6. **Switch on** and **don't touch anything for at least 30 seconds**: the bootloader copies the firmware (usually 10–15 s).
    The screen may stay black or frozen meanwhile: that's normal.
    **Do not switch off during this phase.**
-7. When the menu appears, go to **Control → Info**: it must read **`Simomusu93 0.8`**.
+7. When the menu appears, go to **Control → Info**: it must read **`Simomusu93 0.9`**.
    If it still shows the old version, the file was not read → rename it to another new name and repeat from step 4.
 8. Remove the microSD and delete the `.bin` (or leave it: with the same name it won't be installed again).
 
@@ -61,6 +61,15 @@ Use the files in `modelli/miei/test-firmware/` (instructions in that folder's RE
 
 If anything goes wrong (strange heating, freezes, overlapping text): **switch off** and go to step 4.
 A photo of the screen helps understand the problem.
+
+## 3b. G-code preview (from 0.9)
+
+The printer shows the model picture on the file confirm screen only if the G-code contains the preview block. Two ways to add it:
+- **automatically**: in Creality Print, process settings → *Others* (advanced/expert view) → **Post-processing scripts**, enter
+  `"C:\Users\<user>\.venvs\pio\Scripts\python.exe" "<project>\strumenti\anteprima_gcode.py";`
+  (with your own paths); every exported G-code then gets the preview;
+- **by hand**: drag one or more G-code files onto `strumenti/anteprima_gcode.bat`.
+Without the block the screen shows Creality's robot as before. Drawing takes 1–4 seconds ("Anteprima..." in the title).
 
 ## 4. Going back to the original firmware (backup)
 

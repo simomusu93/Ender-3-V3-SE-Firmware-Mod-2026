@@ -4,7 +4,7 @@ Stampante: Creality Ender-3 V3 SE · scheda **CR4NS200320C13** (chip GD32F303). 
 
 | File | Dove |
 |---|---|
-| Firmware nuovo | `firmware/build/Simomusu93-FW_0.8.bin` |
+| Firmware nuovo | `firmware/build/Simomusu93-FW_0.9.bin` |
 | Firmware originale (backup) | `firmware/originale-creality-1.1.0/Ender3 V3 SE GD303SWV1.1.0_HWCR4NS200320C13_20250422.bin` |
 
 ---
@@ -23,18 +23,18 @@ Stampante: Creality Ender-3 V3 SE · scheda **CR4NS200320C13** (chip GD32F303). 
 
 ## 1. Caricare Simomusu93-FW
 
-1. Copia `Simomusu93-FW_0.8.bin` nella **cartella principale** della microSD (non dentro altre cartelle).
-2. **Rinominalo con un nome mai usato prima**: massimo 8 lettere/numeri, **senza spazi e senza altri punti**, ad esempio `fw08.bin`.
+1. Copia `Simomusu93-FW_0.9.bin` nella **cartella principale** della microSD (non dentro altre cartelle).
+2. **Rinominalo con un nome mai usato prima**: massimo 8 lettere/numeri, **senza spazi e senza altri punti**, ad esempio `fw09.bin`.
    Nomi come `sm93_0.8.bin` (due punti) non vanno: Windows li salva con un nome corto tipo `SM93_0~1.BIN`, uguale per 0.6, 0.7, 0.8…,
    e il bootloader li scambia per il firmware già installato (successo il 14/10/2026).
-   Il bootloader ignora un file con un nome già installato: ogni volta usa un nome nuovo (`sm93_08b.bin`, …).
+   Il bootloader ignora un file con un nome già installato: ogni volta usa un nome nuovo (`fw09b.bin`, …).
 3. Rimuovi la microSD dal PC in sicurezza (icona "Rimozione sicura").
 4. **Spegni la stampante** con l'interruttore.
 5. Inserisci la microSD nello slot della stampante.
 6. **Accendi** e **non toccare niente per almeno 30 secondi**: il bootloader copia il firmware (10–15 s di solito).
    Lo schermo può restare nero o fermo in questo tempo: è normale.
    **Non spegnere durante questa fase.**
-7. Quando compare il menu, vai in **Controllo → Info**: deve esserci **`Simomusu93 0.8`**.
+7. Quando compare il menu, vai in **Controllo → Info**: deve esserci **`Simomusu93 0.9`**.
    Se c'è ancora la versione vecchia: il file non è stato letto → rinominalo con un altro nome nuovo e ripeti dal punto 4.
 8. Togli la microSD e cancella il `.bin` (o lascialo: con lo stesso nome non verrà reinstallato).
 
@@ -61,6 +61,15 @@ Usa i file di `modelli/miei/test-firmware/` (istruzioni nel README di quella car
 
 Se qualcosa non va (riscaldamento strano, blocchi, scritte sovrapposte): **spegni** e passa al punto 4.
 Una foto dello schermo aiuta a capire il problema.
+
+## 3b. Anteprima del G-code (dalla 0.9)
+
+La stampante mostra l'immagine del modello nella schermata di conferma solo se il G-code contiene il blocco dell'anteprima. Per aggiungerlo:
+- **in automatico**: in Creality Print, impostazioni del Processo → *Altro* (vista avanzata/esperto) → **Script di post-elaborazione**, scrivi
+  `"C:\Users\<utente>\.venvs\pio\Scripts\python.exe" "<cartella del progetto>\strumenti\anteprima_gcode.py";` (con i tuoi percorsi)
+  e ogni G-code esportato avrà l'anteprima;
+- **a mano**: trascina uno o più G-code sul file `strumenti/anteprima_gcode.bat`.
+Senza il blocco resta l'omino di Creality. Il disegno dura 1–4 secondi (nel titolo compare "Anteprima...").
 
 ## 4. Tornare al firmware originale (backup)
 

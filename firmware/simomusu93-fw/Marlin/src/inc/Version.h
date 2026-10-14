@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Marlin 3D Printer Firmware
  * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
@@ -26,7 +26,7 @@
  */
 #ifndef SHORT_BUILD_VERSION
   #if ENABLED(HIGH_SPEED_1)
-    #define SHORT_BUILD_VERSION "Simomusu93 0.8" // Simomusu93-FW su base Creality V1.0.6 (max ~9 caratteri come "V1.1.0_SD" di navaismo)
+    #define SHORT_BUILD_VERSION "Simomusu93 0.9" // Simomusu93-FW su base Creality V1.0.6 (max ~9 caratteri come "V1.1.0_SD" di navaismo)
   #else
     #define SHORT_BUILD_VERSION "Ender-3V3 SE_Ten_P1T14T" // GD32F303RET6 + Multilanguage 1.Chinese 2.English 3.German 4.Russian 5.French 6.Turkish 7.Spanish 8.Italian 9.Portuguese
   #endif  

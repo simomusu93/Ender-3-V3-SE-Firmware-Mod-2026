@@ -29,6 +29,8 @@ REQUIRED = {                       # funzione nel firmware -> funzionalità
     "MarlinUI::buzzer_enabled": "interruttore Suono (0.3)",
     "simomusu93_runout_enabled": "interruttore Sensore filo (0.3)",
     "PrintCounter::data": "statistiche di stampa salvate (PRINTCOUNTER)",
+    # 0.9
+    "simomusu93_render_thumb(": "anteprima del G-code sullo schermo (0.9)",
 }
 
 ok = fail = 0
@@ -59,6 +61,7 @@ syms = run("arm-none-eabi-nm.exe", "-C", elf)
 ver = m.group(1).decode() if m else ""
 for name, what in REQUIRED.items():
     if "(0.3)" in what and ver in ("Simomusu93 0.1", "Simomusu93 0.2"): continue
+    if "(0.9)" in what and re.match(r"Simomusu93 0\.[1-8]$", ver): continue
     check(name in syms, what)
 # 0.8: linear advance spento come nel firmware Creality (con l'input shaping Creality sottoestrudeva il primo strato)
 check("GcodeSuite::M900()" not in syms, "linear advance spento (M900 assente, come Creality)")

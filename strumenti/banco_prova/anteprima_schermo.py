@@ -53,6 +53,9 @@ def screen(title, name, pct, elapsed, remain, layer_txt, remain_wrong=False):
 rows = list(csv.DictReader(open(sys.argv[1], encoding="utf-8"), delimiter=";"))
 name, out = sys.argv[2], sys.argv[3]
 os.makedirs(out, exist_ok=True)
+if not rows:   # G-code senza M73 (es. affettato con un altro slicer): il simulatore non registra la cronologia
+    print("(nessun dato M73 nel G-code: anteprime dello schermo saltate)")
+    sys.exit(0)
 for target in map(float, sys.argv[4:]):
     r = min(rows, key=lambda x: abs(float(x["tempo_trascorso_min"]) - target))
     el = float(r["tempo_trascorso_min"]); R = float(r["m73_R_min"]); cr = float(r["stima_creality_min"])

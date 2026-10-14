@@ -7,6 +7,7 @@
 # Livello 1: verifica_firmware.py   – struttura del .bin, funzionalità presenti, memoria e stack
 # Livello 2: simula_gcode.exe       – il modulo del firmware che legge il G-code, fatto girare sul file vero
 # Livello 3: anteprima_schermo.py   – come apparirebbe lo schermo (originale Creality vs Simomusu93-FW)
+# Livello 4: simula_anteprima.exe   – il codice dell'anteprima del firmware disegna su uno schermo finto (0.9)
 param(
   [Parameter(Mandatory = $true)][string]$Gcode,
   [string]$Bin   = "",   # vuoto = il Simomusu93-FW_*.bin più recente in firmware\build
@@ -50,7 +51,29 @@ $tot = (Import-Csv $csv -Delimiter ';' | Select-Object -First 1).m73_R_min
 $m = $Minuti | ForEach-Object { if ($_ -eq 0) { [math]::Round([double]$tot / 2) } else { $_ } }
 & $py (Join-Path $here "anteprima_schermo.py") $csv $nome $out @m
 
+Write-Output "`n===== LIVELLO 4: anteprima del file (0.9) ====="
+# Copia del G-code con il blocco dell'anteprima (lo script lavora sempre su una copia, mai sul file originale)
+$stub = Join-Path $here "anteprima_stub\feature\simomusu93"
+New-Item -ItemType Directory -Force $stub | Out-Null
+$fwdir = Join-Path $here "..\..\firmware\simomusu93-fw\Marlin\src\feature\simomusu93"
+Copy-Item (Join-Path $fwdir "simomusu93_thumb.cpp"), (Join-Path $fwdir "simomusu93_thumb.h") $stub -Force
+$gthumb = Join-Path $out "con_anteprima.gcode"
+Copy-Item $Gcode $gthumb -Force
+& $py -I (Join-Path $here "..\anteprima_gcode.py") $gthumb
+Push-Location $here; & $py -m ziglang c++ -O1 -std=c++17 -w -o simula_anteprima.exe simula_anteprima.cpp anteprima_stub\feature\simomusu93\simomusu93_thumb.cpp 2>$null; Pop-Location
+$rawf = Join-Path $out "anteprima_disegnata.raw"
+if (-not (Select-String -Path $gthumb -Pattern "E3V3SE_THUMB_RAW16_BEGIN" -SimpleMatch -Quiet)) {
+  Write-Output "(il G-code non contiene un'anteprima dello slicer: sulla stampante resterà l'omino)"
+  $l4 = 0
+} else {
+  & (Join-Path $here "simula_anteprima.exe") $gthumb $rawf
+  $l4 = $LASTEXITCODE
+}
+if ($l4 -eq 0 -and (Test-Path $rawf)) { & $py -I (Join-Path $here "verifica_anteprima.py") $gthumb $rawf (Join-Path $out "anteprima_disegnata.png"); $l4 = $LASTEXITCODE }
+Remove-Item $gthumb, $rawf -ErrorAction SilentlyContinue
+
 Write-Output "`n===== ESITO ====="
 Write-Output ("Livello 1 (firmware):   " + $(if ($l1 -eq 0) { "OK" } else { "PROBLEMI" }))
 Write-Output ("Livello 2 (G-code):     " + $(if ($l2 -eq 0) { "OK" } else { "PROBLEMI" }))
+Write-Output ("Livello 4 (anteprima):  " + $(if ($l4 -eq 0) { "OK" } else { "PROBLEMI (o file senza anteprima)" }))
 Write-Output "Anteprime e CSV in:     $out"

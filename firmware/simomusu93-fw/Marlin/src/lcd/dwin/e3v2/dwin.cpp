@@ -43,6 +43,7 @@ lin 3D Printer Firmware
 #include "../../../feature/simomusu93/simomusu93_gcode_info.h" // Simomusu93-FW
 #include "../../../feature/simomusu93/simomusu93_ram.h"        // Simomusu93-FW
 #include "../../../feature/simomusu93/simomusu93_settings.h"   // Simomusu93-FW
+#include "../../../feature/simomusu93/simomusu93_thumb.h"      // Simomusu93-FW
 #include "../../../sd/cardreader.h"
 #include "../../../MarlinCore.h"
 #include "../../../core/serial.h"
@@ -4788,9 +4789,18 @@ void HMI_SelectFile()
       uint8_t ret = PIC_MISS_ERR;
       //Ender-3v3 SE暂时不支持图片预览功能，防止卡死，显示默认预览图片
       ret = gcodePicDataSendToDwin(card.filename, VP_OVERLAY_PIC_PREVIEW_1, PRIWIEW_PIC_FORMAT_NEED, PRIWIEW_PIC_RESOLITION_NEED);
-      // if(ret == PIC_MISS_ERR) 
-      DC_Show_defaut_image(); //由于此项目没有图片预览数据，所以显示默认小机器人图片    
       Image_Preview_Information_Show(ret);// 图片预览详情信息显示
+      // Simomusu93-FW: anteprima disegnata dal firmware (blocco E3V3SE_THUMB_RAW16 aggiunto da strumenti/anteprima_gcode.py);
+      // senza blocco resta l'omino di Creality. Dura qualche secondo: nel titolo compare "Anteprima..." intanto.
+      #if ENABLED(DWIN_CREALITY_320_LCD)
+        Clear_Title_Bar();
+        Draw_Title(F("Anteprima..."));
+        if (!simomusu93_render_thumb(card.filename, ICON_Defaut_Image_X, ICON_Defaut_Image_Y)) DC_Show_defaut_image();
+        Clear_Title_Bar();
+        Draw_Title(str);
+      #else
+        DC_Show_defaut_image(); //由于此项目没有图片预览数据，所以显示默认小机器人图片
+      #endif
     }
   }
   HMI_SelectFileExit:

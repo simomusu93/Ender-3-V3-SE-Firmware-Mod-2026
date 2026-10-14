@@ -121,6 +121,8 @@ void DWIN_Draw_Rectangle(uint8_t mode, uint16_t color,
                          uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd);
 
 void DWIN_Set_Color(uint16_t FC,uint16_t BC);
+// Simomusu93-FW: rettangolo pieno nel colore corrente (senza rimandare il colore): per l'anteprima del G-code
+void DWIN_Fill_Rect_Raw(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd);
 void  DWIN_Set_24_Color(uint32_t BC);
 // Draw a box
 //  mode: 0=frame, 1=fill, 2=XOR fill

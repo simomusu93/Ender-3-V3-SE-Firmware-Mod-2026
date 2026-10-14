@@ -19,7 +19,21 @@ The printer's menus are in Italian; the new labels are translated in brackets be
 
 ## Versions
 
-### 0.8 – `build/Simomusu93-FW_0.8.bin` (231,660 bytes, SHA256 7A29B706…B5F944F4) – FLASHED on 2026-10-14
+### 0.9 – `build/Simomusu93-FW_0.9.bin` (232,772 bytes, SHA256 58A8C838…9A60B529) – TO TEST
+- **G-code preview on the file confirm screen**, instead of Creality's fixed "robot" image. The V3 SE screen cannot decode the
+  PNG/JPG thumbnails that Creality Print embeds (Creality's own code says so and always shows the robot), so:
+  - `strumenti/anteprima_gcode.py` (slicer post-processing script, or drag a G-code onto `anteprima_gcode.bat`) converts the 96×96 PNG
+    into a `; E3V3SE_THUMB_RAW16_BEGIN 96x96` block (RGB565 hex, 32 colours, transparent background = not drawn) right after the header;
+  - `feature/simomusu93/simomusu93_thumb.cpp` draws it at the robot's position (72, 25) with filled rectangles: per-row runs merged
+    vertically, grouped by colour, a 16 ms pause every 10 commands (the panel locks up if flooded), watchdog fed while drawing.
+  Format and algorithm from navaismo's 2.1 port (`ThumbRender.cpp`, GPL-3.0), rewritten for Marlin 2.0.8; 1024 runs = 6 KB RAM
+  (navaismo: 1536 = 9 KB); bigger images just flush early. New `DWIN_Fill_Rect_Raw()`.
+  No preview block → the robot as before. Title shows "Anteprima..." while drawing (~1.5 s for the test cube, ~3.4 s for Kratos).
+- RAM: 29.1 KB static (+6.5 KB) → 34.9 KB left for stack and heap. Settings unchanged.
+- Test bench level 4: the firmware's preview code compiled for the PC draws on a fake 240×320 screen: cube and Kratos pixel-exact
+  (0 different pixels; Kratos also exercises the early flush), no overdraw, nothing outside the 96×96 area. 25/25 checks.
+
+### 0.8 – (231,660 bytes, SHA256 7A29B706…B5F944F4, not kept in the repository) – FLASHED on 2026-10-14
 - **Linear advance turned off again**, as in the stock Creality firmware. Test on 2026-10-14, same 20 mm cube, same firmware (0.6):
   with `M900 K0.05` (written by Creality Print from the filament profile) the first layer was badly under-extruded on the 80 mm/s infill;
   with `M900 K0` the cube printed perfectly. In this Creality Marlin 2.0.8 fork linear advance does not work well together with
