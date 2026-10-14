@@ -1,0 +1,120 @@
+--- creality/Marlin/Configuration_adv.h
++++ navaismo/Marlin/Configuration_adv.h
+@@ -1283,6 +1283,15 @@
+ 
+   // Show the E position (filament used) during printing
+   //#define LCD_SHOW_E_TOTAL
++#endif
++
++// Simomusu93-FW: progresso e tempo rimanente dai comandi M73 del G-code (Creality Print / Orca) sullo schermo DWIN.
++// Volutamente SENZA attivare HAS_DISPLAY: navaismo lo ha fatto e kill() finisce per chiamare
++// MarlinUI::kill_screen(), che per DWIN non esiste (salto a indirizzo nullo durante un errore termico).
++#if ENABLED(DWIN_CREALITY_LCD)
++  #define LCD_SET_PROGRESS_MANUALLY
++  #define SHOW_REMAINING_TIME
++  #define USE_M73_REMAINING_TIME
+ #endif
+ 
+ #if EITHER(SDSUPPORT, LCD_SET_PROGRESS_MANUALLY) && ANY(HAS_MARLINUI_U8GLIB, HAS_MARLINUI_HD44780, IS_TFTGLCD_PANEL, EXTENSIBLE_UI)
+--- creality/Marlin/src/MarlinCore.cpp
++++ navaismo/Marlin/src/MarlinCore.cpp
+@@ -362,6 +362,7 @@
+     #if BOTH(LCD_SET_PROGRESS_MANUALLY, USE_M73_REMAINING_TIME)
+       ui.reset_remaining_time();
+     #endif
++    TERN_(LCD_SET_PROGRESS_MANUALLY, ui.set_progress(0)); // Simomusu93-FW: niente % residua della stampa precedente
+   }
+   print_job_timer.start();
+ }
+--- creality/Marlin/src/inc/SanityCheck.h
++++ navaismo/Marlin/src/inc/SanityCheck.h
+@@ -733,7 +733,7 @@
+     #error "PROGRESS_MSG_EXPIRE must be greater than or equal to 0."
+   #endif
+ #elif ENABLED(LCD_SET_PROGRESS_MANUALLY)
+-  #if NONE(HAS_MARLINUI_U8GLIB, HAS_GRAPHICAL_TFT, HAS_MARLINUI_HD44780, EXTENSIBLE_UI)
++  #if NONE(HAS_MARLINUI_U8GLIB, HAS_GRAPHICAL_TFT, HAS_MARLINUI_HD44780, EXTENSIBLE_UI, DWIN_CREALITY_LCD) // Simomusu93-FW: lo schermo DWIN mostra % e tempo
+     #error "LCD_SET_PROGRESS_MANUALLY requires LCD_PROGRESS_BAR, Character LCD, Graphical LCD, TFT, or EXTENSIBLE_UI."
+   #endif
+ #endif
+--- creality/Marlin/src/inc/Version.h
++++ navaismo/Marlin/src/inc/Version.h
+@@ -26,7 +26,7 @@
+  */
+ #ifndef SHORT_BUILD_VERSION
+   #if ENABLED(HIGH_SPEED_1)
+-    #define SHORT_BUILD_VERSION "V1.0.6"
++    #define SHORT_BUILD_VERSION "Simomusu93 0.1" // Simomusu93-FW su base Creality V1.0.6 (max ~9 caratteri come "V1.1.0_SD" di navaismo)
+   #else
+     #define SHORT_BUILD_VERSION "Ender-3V3 SE_Ten_P1T14T" // GD32F303RET6 + Multilanguage 1.Chinese 2.English 3.German 4.Russian 5.French 6.Turkish 7.Spanish 8.Italian 9.Portuguese
+   #endif  
+--- creality/Marlin/src/lcd/dwin/e3v2/dwin.cpp
++++ navaismo/Marlin/src/lcd/dwin/e3v2/dwin.cpp
+@@ -7684,7 +7684,14 @@
+   if (card.isPrinting() && checkkey == PrintProcess)
+   {
+     // print process
+-    const uint8_t card_pct = card.percentDone();
++    // Simomusu93-FW: % dello slicer (M73 P) se presente, altrimenti byte letti dalla SD.
++    // (Non si usa ui.get_progress_percent(): con DWIN e senza HAS_DISPLAY MarlinUI::_get_progress() non viene compilata.)
++    #if ENABLED(LCD_SET_PROGRESS_MANUALLY)
++      const uint16_t m73_pct = ui.progress_override & PROGRESS_MASK;
++      const uint8_t card_pct = m73_pct ? uint8_t(m73_pct / (PROGRESS_SCALE)) : card.percentDone();
++    #else
++      const uint8_t card_pct = card.percentDone();
++    #endif
+     // _card_percent=card.percentDone();
+     static uint8_t last_cardpercentValue = 101;
+     if (last_cardpercentValue != card_pct) 
+@@ -7711,6 +7718,18 @@
+ 
+     // Estimate remaining time every 20 seconds
+     static millis_t next_remain_time_update = 0;
++    #if ENABLED(USE_M73_REMAINING_TIME)
++    // Simomusu93-FW: se il G-code contiene M73 R usa il tempo calcolato dallo slicer.
++    // La stima Creality qui sotto estrapola dai byte letti e all'inizio di stampe con base piena/supporti
++    // sovrastima enormemente (es. 60 h invece di 14 h).
++    if (ui.remaining_time && ELAPSED(ms, next_remain_time_update))
++    {
++      _remain_time = ui.remaining_time;
++      next_remain_time_update = ms + DWIN_REMAIN_TIME_UPDATE_INTERVAL;
++      Draw_Print_ProgressRemain();
++    }
++    else
++    #endif
+     if (_card_percent >= 1 && ELAPSED(ms, next_remain_time_update) && !HMI_flag.heat_flag)   //rock_20210922
+     {
+       // _remain_time = (elapsed.value - dwin_heat_time) / (_card_percent * 0.01f) - (elapsed.value - dwin_heat_time);
+--- creality/Marlin/src/lcd/marlinui.h
++++ navaismo/Marlin/src/lcd/marlinui.h
+@@ -51,7 +51,7 @@
+   #define MULTI_E_MANUAL 1
+ #endif
+ 
+-#if HAS_DISPLAY
++#if HAS_DISPLAY || ENABLED(SHOW_REMAINING_TIME) // Simomusu93-FW: serve a _calculated_remaining_time() anche con DWIN
+   #include "../module/printcounter.h"
+ #endif
+ 
+--- creality/ini/stm32f1.ini
++++ navaismo/ini/stm32f1.ini
+@@ -449,6 +449,7 @@
+ board_build.ldscript = creality.ld
+ extra_scripts   = ${env:STM32F103RE.extra_scripts}
+   buildroot/share/PlatformIO/scripts/custom_board.py
++  post:buildroot/share/PlatformIO/scripts/simomusu93_strict_link.py
+ debug_tool      = jlink
+ upload_protocol = jlink
+ 
+
+### NUOVO FILE: buildroot/share/PlatformIO/scripts/simomusu93_strict_link.py
++#
++# Simomusu93-FW: il framework maple per STM32F1 aggiunge -Wl,--warn-unresolved-symbols, che trasforma una funzione
++# mancante in un semplice avviso: il firmware viene creato lo stesso e la chiamata salta all'indirizzo 0.
++# (Così è nato il bug di navaismo su kill_screen().) Qui togliamo l'opzione: una funzione mancante = errore.
++#
++Import("env")
++
++flags = env.get("LINKFLAGS", [])
++env.Replace(LINKFLAGS=[f for f in flags if f != "-Wl,--warn-unresolved-symbols"])
++print("Simomusu93-FW: link rigoroso attivo (funzioni mancanti = errore)")

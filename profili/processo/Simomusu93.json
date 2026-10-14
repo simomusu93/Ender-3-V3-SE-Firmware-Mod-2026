@@ -1,0 +1,31 @@
+{
+    "base_id": "GP004",
+    "brim_type": "outer_only",
+    "enable_support": "1",
+    "from": "User",
+    "inherits": "0.20mm Standard @Creality Ender-3 V3 SE 0.4 nozzle",
+    "initial_layer_speed": [
+        "25"
+    ],
+    "inner_wall_speed": [
+        "150"
+    ],
+    "is_custom_defined": "0",
+    "name": "Simomusu93",
+    "outer_wall_speed": [
+        "80"
+    ],
+    "print_settings_id": "Simomusu93",
+    "sparse_infill_speed": [
+        "150"
+    ],
+    "support_object_xy_distance": "0.8",
+    "support_on_build_plate_only": "1",
+    "support_speed": [
+        "80"
+    ],
+    "support_style": "organic",
+    "support_top_z_distance": "0.22",
+    "support_type": "tree(auto)",
+    "version": "26.10.10.9"
+}

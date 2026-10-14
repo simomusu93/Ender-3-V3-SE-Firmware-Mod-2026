@@ -1,0 +1,27 @@
+# --- Materiale di terzi o protetto da copyright: NON pubblicare ---
+modelli/scaricati/
+modelli/miei/kenshiro/riferimenti/
+firmware/originale-creality-1.1.0/
+firmware/navaismo-1.1.0/
+firmware/creality-sorgente-1.0.6/
+firmware/diff_creality106_vs_navaismo110.diff
+strumenti/banco_prova/risultati/
+
+# --- File di stampa e lavoro ---
+*.gcode
+*.3mf
+gcode/
+progetti-slicer/
+foto/
+
+# --- Generati / pesanti ---
+firmware/build/*_sorgente.zip
+strumenti/banco_prova/*.exe
+strumenti/banco_prova/*.pdb
+firmware/*/.pio/
+firmware/*/output.map
+*.su
+__pycache__/
+
+# --- Note di lavoro locali (percorsi del PC) ---
+CLAUDE.md
