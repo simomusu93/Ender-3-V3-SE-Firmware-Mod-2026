@@ -85,6 +85,7 @@ a firmware that crashes).
 | 0.4 | Info menu: "RAM libera min" (min free RAM) replaces "Contact us"; fixed the Control menu redraw when scrolling back up (empty or duplicated entries) |
 | 0.5 | Fixed the "Motion" label left overlapping another entry when scrolling the Control menu back up |
 | 0.6 | Fixed the layer counter showing "Z 0.44 mm" instead of "Strato X/Y": the start G-code's M190/M109 were wiping the total layer count |
+| 0.7 | A new print no longer shows the % and remaining time of the previous one |
 
 Full changelog with sizes, SHA256 and test procedures: [`Simomusu93-FW.md`](firmware/simomusu93-fw/Simomusu93-FW.md).
 

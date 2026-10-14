@@ -4,7 +4,7 @@ Printer: Creality Ender-3 V3 SE · mainboard **CR4NS200320C13** (GD32F303 chip).
 
 | File | Where |
 |---|---|
-| New firmware | `firmware/build/Simomusu93-FW_0.6.bin` |
+| New firmware | `firmware/build/Simomusu93-FW_0.7.bin` |
 | Original firmware (backup) | `Ender3 V3 SE GD303SWV1.1.0_HWCR4NS200320C13_20250422.bin` from the official Creality download page (not included in this repository) |
 
 The printer's menus are shown here in English; on an Italian-language printer they are *Controllo → Info*, *Livellamento*, *Salva impostazioni*.
@@ -23,16 +23,16 @@ The printer's menus are shown here in English; on an Italian-language printer th
 
 ## 1. Flashing Simomusu93-FW
 
-1. Copy `Simomusu93-FW_0.6.bin` to the **root** of the microSD (not inside a folder).
-2. **Rename it to a name never used before**, short and without spaces, e.g. `sm93_06.bin`.
-   The bootloader ignores a file whose name was already installed: use a new name every time (`sm93_06b.bin`, …).
+1. Copy `Simomusu93-FW_0.7.bin` to the **root** of the microSD (not inside a folder).
+2. **Rename it to a name never used before**, short and without spaces, e.g. `sm93_07.bin`.
+   The bootloader ignores a file whose name was already installed: use a new name every time (`sm93_07b.bin`, …).
 3. Safely eject the microSD from the PC.
 4. **Switch the printer off** with the power switch.
 5. Insert the microSD into the printer.
 6. **Switch on** and **don't touch anything for at least 30 seconds**: the bootloader copies the firmware (usually 10–15 s).
    The screen may stay black or frozen meanwhile: that's normal.
    **Do not switch off during this phase.**
-7. When the menu appears, go to **Control → Info**: it must read **`Simomusu93 0.6`**.
+7. When the menu appears, go to **Control → Info**: it must read **`Simomusu93 0.7`**.
    If it still shows the old version, the file was not read → rename it to another new name and repeat from step 4.
 8. Remove the microSD and delete the `.bin` (or leave it: with the same name it won't be installed again).
 

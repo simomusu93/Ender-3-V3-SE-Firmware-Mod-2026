@@ -19,7 +19,18 @@ The printer's menus are in Italian; the new labels are translated in brackets be
 
 ## Versions
 
-### 0.6 – `build/Simomusu93-FW_0.6.bin` (233,500 bytes, SHA256 51AFFD77…B781F0D04) – TO TEST
+### 0.7 – `build/Simomusu93-FW_0.7.bin` (233,540 bytes, SHA256 F01614AB…C47362E16) – TO TEST
+0.6 on the printer (2026-10-14): "Strato 0/166" OK, but a new print started showing 12% and 00:30 left from the previous (aborted) print.
+- Cause 1: Creality only redrew the % when it was > 0, so a reset to 0 never reached the screen.
+- Cause 2: the print screen is drawn right after `openAndPrintFile()`, which only *queues* M23/M24: the file is opened later,
+  so the screen still had the old values (and stayed like that during the pre-print calibration).
+- Fix: `simomusu93_new_print_reset()` (%, M73 remaining time, layer info, screen variables) before the print screen is drawn,
+  and the % is redrawn on every change, 0 included.
+- Same session, open issue: the 20 mm cube came out under-extruded on the 80 mm/s first-layer infill while the slow purge line was fine.
+  Suspect: linear advance (stock Creality has it off; the G-code sets `M900 K0.05`). Test with `M900 K0` in progress.
+Test bench: 24/24 checks.
+
+### 0.6 (233,500 bytes, SHA256 51AFFD77…B781F0D04, not kept in the repository)
 First real print (20 mm cube, 2026-10-14): the print screen showed "Z 0.44 mm" instead of "Strato X/Y".
 - Cause: the reset of layer/total/time calibration was in `startOrResumeJob()`. With `PRINTJOB_TIMER_AUTOSTART`, the `M190`/`M109`
   of the start G-code also go through it, **after** the header with the total layer count has been read → total wiped.

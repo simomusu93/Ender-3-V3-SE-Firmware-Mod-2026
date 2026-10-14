@@ -2650,6 +2650,20 @@ static uint8_t simomusu93_percent()
   return card.percentDone();
 }
 
+// Simomusu93-FW: nuova stampa = %, tempo residuo e strato da zero, anche sullo schermo.
+// Serve prima di Goto_PrintProcess(): la schermata viene disegnata prima che M23 apra il file, e senza questo
+// mostrava % e tempo della stampa precedente (es. 12% di un cubo interrotto).
+static void simomusu93_new_print_reset()
+{
+  TERN_(LCD_SET_PROGRESS_MANUALLY, ui.set_progress(0));
+  #if BOTH(LCD_SET_PROGRESS_MANUALLY, USE_M73_REMAINING_TIME)
+    ui.reset_remaining_time();
+  #endif
+  simomusu93_info.reset();
+  _card_percent = 0;
+  _remain_time = 0;
+}
+
 // Simomusu93-FW: riga "Strato 152/1078" sotto il tempo rimanente (fascia libera tra tempi e pulsanti).
 // Se il totale non è noto (es. ripresa dopo blackout) mostra l'altezza "Z 12.40 mm".
 #if ENABLED(DWIN_CREALITY_320_LCD)
@@ -7885,11 +7899,9 @@ void EachMomentUpdate()
     {
       // print percent
       last_cardpercentValue = card_pct;
-      if (card_pct)
-      {
-        _card_percent = card_pct;
-        Draw_Print_ProgressBar();
-      }
+      // Simomusu93-FW: ridisegna anche lo 0 (Creality saltava lo 0 e restava la % della stampa precedente)
+      _card_percent = card_pct;
+      Draw_Print_ProgressBar();
     }
 
     duration_t elapsed = print_job_timer.duration(); // print timer
@@ -8105,6 +8117,7 @@ void Show_G_Pic(void)
       HMI_ValueStruct.show_mode = 0;
       //rock_20210819
       recovery.info.sd_printing_flag=true;
+      simomusu93_new_print_reset(); // Simomusu93-FW
     
       card.openAndPrintFile(card.filename);
       Goto_PrintProcess();
